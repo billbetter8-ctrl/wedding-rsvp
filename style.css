@@ -1,0 +1,153 @@
+:root {
+  --bg: #f8f5f1;
+  --text: #292522;
+  --muted: #817970;
+  --line: #ded7cf;
+  --accent: #8d6f61;
+  --white: #fffdf9;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Manrope, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, textarea { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+
+.app {
+  min-height: 100svh;
+  max-width: 680px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.screen {
+  display: none;
+  min-height: 100svh;
+  padding: max(28px, env(safe-area-inset-top)) 24px max(32px, env(safe-area-inset-bottom));
+  animation: in .35s ease both;
+}
+.screen.active { display: flex; }
+
+@keyframes in {
+  from { opacity: 0; transform: translateX(18px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.hero {
+  position: relative;
+  align-items: flex-end;
+  padding: 0;
+  color: white;
+  background: #5c5149;
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(25,20,17,.68), rgba(25,20,17,.05) 60%),
+    url("assets/hero.jpg") center/cover no-repeat,
+    #8c7b70;
+}
+.hero-content {
+  position: relative;
+  width: 100%;
+  padding: 40px 26px calc(34px + env(safe-area-inset-bottom));
+}
+.hero h1, h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  line-height: .95;
+}
+.hero h1 { font-size: clamp(56px, 16vw, 94px); margin: 12px 0 16px; }
+.date { font-size: 16px; letter-spacing: .12em; text-transform: uppercase; }
+
+.screen-inner {
+  width: 100%;
+  max-width: 540px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+.progress {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .14em;
+  margin-bottom: 60px;
+}
+.eyebrow {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: 11px;
+  margin: 0 0 18px;
+}
+h2 {
+  font-size: clamp(42px, 12vw, 66px);
+  margin: 0 0 42px;
+}
+.choices { display: grid; gap: 12px; }
+.choice, .primary {
+  min-height: 60px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--text);
+  padding: 16px 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: .2s ease;
+}
+.choice:active, .primary:active { transform: scale(.98); }
+.choice.selected { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(141,111,97,.12); }
+.primary {
+  border: 0;
+  background: var(--text);
+  color: white;
+  text-align: center;
+  width: 100%;
+  margin-top: 18px;
+}
+.hero .primary { background: rgba(255,253,249,.96); color: var(--text); margin-top: 28px; }
+.two { grid-template-columns: 1fr 1fr; }
+.details { display: none; margin-top: 30px; }
+.details.visible { display: block; }
+.hint { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+.alcohol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.alcohol-grid label, .field-label { color: var(--muted); font-size: 12px; }
+input, textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+  color: var(--text);
+  outline: none;
+}
+input { height: 50px; padding: 0 14px; margin-top: 6px; }
+textarea {
+  min-height: 110px;
+  resize: vertical;
+  padding: 14px;
+  margin-top: 6px;
+}
+.field-label { display: block; margin-top: 16px; }
+.big-text { min-height: 180px; margin: 0 0 8px; }
+.optional { display: none; margin-top: 12px; }
+.optional.visible { display: block; }
+.error { color: #9b3f3f; font-size: 13px; min-height: 20px; }
+.success { align-items: center; text-align: center; }
+.center { align-items: center; }
+.heart { font-size: 76px; color: var(--accent); margin-bottom: 20px; }
+.success h2 { margin-bottom: 18px; }
+.success p:not(.eyebrow) { color: var(--muted); line-height: 1.7; }
+
+@media (min-width: 700px) {
+  body { padding: 24px 0; }
+  .app { min-height: calc(100svh - 48px); border-radius: 28px; box-shadow: 0 16px 60px rgba(45,35,28,.12); }
+  .screen { min-height: calc(100svh - 48px); }
+}
