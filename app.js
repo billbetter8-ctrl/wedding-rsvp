@@ -1,6 +1,5 @@
 const CONFIG = {
-  // После публикации Google Apps Script вставьте сюда URL веб-приложения.
-  apiUrl: "PASTE_GOOGLE_APPS_SCRIPT_URL_HERE"
+  apiUrl: atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3S1lpZllHYnVITTJpdFEzM3lGYlA4TmZER3pMLTVtdjExMlhkRlZRUnhpX251Znl2Z1lVekxKSkpJUmxDLWNUbTM2dy9leGVj")
 };
 
 const state = {
