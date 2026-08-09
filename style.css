@@ -151,3 +151,45 @@ textarea {
   .app { min-height: calc(100svh - 48px); border-radius: 28px; box-shadow: 0 16px 60px rgba(45,35,28,.12); }
   .screen { min-height: calc(100svh - 48px); }
 }
+
+.place {
+  margin-top: 10px;
+  font-size: 15px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .9;
+}
+
+.info-card {
+  display: grid;
+  gap: 16px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+.info-card p { margin: 0; line-height: 1.55; }
+.info-label {
+  display: block;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+.drink-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.drink {
+  min-height: 52px;
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 15px;
+}
+@media (min-width: 520px) {
+  .drink-grid { grid-template-columns: repeat(3, 1fr); }
+}

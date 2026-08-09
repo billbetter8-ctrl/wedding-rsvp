@@ -9,11 +9,8 @@ const state = {
   guests: "",
   guestsOther: "",
   alcohol: "",
-  wine: "",
-  spirits: "",
-  beer: "",
-  otherAlcohol: "",
-  drinks: "",
+  drinks: [],          // выбранные напитки
+  alcoholComment: "",
   comment: ""
 };
 
@@ -23,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function show(name) {
     const target = screens.find(screen => screen.dataset.screen === name);
     if (!target) return;
-
     screens.forEach(screen => screen.classList.remove("active"));
     target.classList.add("active");
     window.scrollTo(0, 0);
@@ -31,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function nextScreen(field) {
     switch (field) {
-      case "attendance": return "guests";
+      case "attendance": return "afterparty";
       case "guests": return "alcohol";
       case "alcohol": return "comment";
       default: return null;
@@ -42,19 +38,23 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("[data-screen='welcome'] [data-next]")
     .addEventListener("click", () => show("attendance"));
 
+  // Экран афтерпати: продолжаем к гостям.
+  const afterpartyNext = document.querySelector("[data-screen='afterparty'] [data-next]");
+  if (afterpartyNext) {
+    afterpartyNext.addEventListener("click", () => show("guests"));
+  }
+
   // Все кнопки выбора.
   document.querySelectorAll("[data-field]").forEach(button => {
     button.addEventListener("click", () => {
       const field = button.dataset.field;
       const value = button.dataset.value;
-
       state[field] = value;
 
       // Выделяем выбранный вариант.
       document
         .querySelectorAll(`[data-field="${field}"]`)
         .forEach(item => item.classList.remove("selected"));
-
       button.classList.add("selected");
 
       // Если гость не сможет прийти — сразу к комментарию.
@@ -72,27 +72,47 @@ document.addEventListener("DOMContentLoaded", () => {
           .classList.toggle("visible", value === "other");
       }
 
-      // Для алкоголя:
-      // "Да" раскрывает дополнительные поля и НЕ переключает экран.
-      // "Нет" сразу переходит дальше.
-      if (field === "alcohol") {
-        const details = document.getElementById("alcoholDetails");
-        details.classList.toggle("visible", value === "yes");
+// Для алкоголя:
+// "Да" показывает список напитков и комментарий.
+// "Нет" показывает только комментарий (сок / лимонад).
+// В обоих случаях дальше — по кнопке "Продолжить".
+if (field === "alcohol") {
+  document.getElementById("alcoholDetails").classList.add("visible");
+  document.getElementById("drinkList").classList.toggle("visible", value === "yes");
 
-        if (value === "yes") {
-          return;
-        }
+  const title = document.getElementById("alcoholCommentTitle");
+  const area = document.getElementById("alcoholComment");
 
-        setTimeout(() => show("comment"), 120);
-        return;
-      }
+  if (value === "yes") {
+    title.textContent = "Комментарий";
+    area.placeholder = "Например: белое сухое, без крепкого";
+  } else {
+    title.textContent = "Что будете пить?";
+    area.placeholder = "Например: яблочный сок, лимонад";
+    // Снимаем выбор напитков, если он был.
+    state.drinks = [];
+    document.querySelectorAll("[data-drink]").forEach(chip => chip.classList.remove("selected"));
+  }
+  return;
+}
 
       // Остальные этапы переключаются после выбора.
       if (button.dataset.next !== undefined) {
         const next = nextScreen(field);
-        if (next) {
-          setTimeout(() => show(next), 120);
-        }
+        if (next) setTimeout(() => show(next), 120);
+      }
+    });
+  });
+
+  // Выбор напитков: можно отметить несколько.
+  document.querySelectorAll("[data-drink]").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const name = chip.dataset.drink;
+      chip.classList.toggle("selected");
+      if (state.drinks.includes(name)) {
+        state.drinks = state.drinks.filter(item => item !== name);
+      } else {
+        state.drinks.push(name);
       }
     });
   });
@@ -104,15 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("submit").addEventListener("click", async () => {
     const error = document.getElementById("error");
     const button = document.getElementById("submit");
-
     error.textContent = "";
 
     state.guestsOther = document.getElementById("guestsOther").value.trim();
-    state.wine = document.getElementById("wine").value;
-    state.spirits = document.getElementById("spirits").value;
-    state.beer = document.getElementById("beer").value;
-    state.otherAlcohol = document.getElementById("otherAlcohol").value;
-    state.drinks = document.getElementById("drinks").value.trim();
+    state.alcoholComment = document.getElementById("alcoholComment").value.trim();
     state.comment = document.getElementById("comment").value.trim();
 
     if (!state.attendance) {
@@ -130,21 +145,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const response = await fetch(CONFIG.apiUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
           ...state,
+          drinks: state.drinks.join(", "),
           submittedAt: new Date().toISOString()
         })
       });
 
       const result = await response.json();
-
       if (!result.ok) {
         throw new Error(result.error || "Ошибка сохранения");
       }
-
       show("success");
     } catch (e) {
       console.error(e);

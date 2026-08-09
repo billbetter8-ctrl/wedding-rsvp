@@ -18,7 +18,8 @@
       <div class="hero-content">
         <p class="eyebrow">Мы приглашаем вас</p>
         <h1>Денис<br>&amp; Альбина</h1>
-        <p class="date">24 октября 2026</p>
+        <p class="date">24 октября 2026 · 13:50</p>
+        <p class="place">Казань, Центр семьи «Казан» («Чаша»)</p>
         <button class="primary" data-next>Ответить на приглашение</button>
       </div>
     </section>
@@ -32,6 +33,28 @@
           <button class="choice" data-value="yes" data-field="attendance" data-next>❤️ Да, обязательно!</button>
           <button class="choice" data-value="no" data-field="attendance" data-next>К сожалению, не смогу</button>
         </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="afterparty">
+      <div class="screen-inner">
+        <p class="eyebrow">Афтерпати</p>
+        <h2>Праздник продолжится!</h2>
+
+      <div class="info-card">
+        <p>
+          <span class="info-label">Где</span>
+          В доме по адресу: ул. Такая-то, д. 00
+        </p>
+        <p>
+          <span class="info-label">Когда</span>
+          26 октября 2026, сразу после банкета
+        </p>
+      </div>
+
+      <p class="hint">А теперь расскажите, сколько вас будет — это поможет нам всё подготовить.</p>
+
+      <button class="primary" data-next>Продолжить</button>
       </div>
     </section>
 
@@ -60,19 +83,26 @@
         </div>
 
         <div id="alcoholDetails" class="details">
-          <p class="hint">Примерное количество, литров</p>
-          <div class="alcohol-grid">
-            <label>Вино<input inputmode="decimal" type="number" min="0" step="0.5" id="wine" placeholder="0"></label>
-            <label>Крепкое<input inputmode="decimal" type="number" min="0" step="0.5" id="spirits" placeholder="0"></label>
-            <label>Пиво<input inputmode="decimal" type="number" min="0" step="0.5" id="beer" placeholder="0"></label>
-            <label>Другое<input inputmode="decimal" type="number" min="0" step="0.5" id="otherAlcohol" placeholder="0"></label>
-          </div>
-          <label class="field-label">Что будете пить?
-            <textarea id="drinks" placeholder="Например: красное вино, виски..."></textarea>
+        <!-- Список напитков: виден только при ответе «Да» -->
+          <div id="drinkList" class="optional">
+            <p class="hint">Отметьте, что пьёте (можно несколько)</p>
+              <div class="drink-grid">
+                <button type="button" class="choice drink" data-drink="Вино">Вино</button>
+                <button type="button" class="choice drink" data-drink="Водка">Водка</button>
+                <button type="button" class="choice drink" data-drink="Коньяк">Коньяк</button>
+                <button type="button" class="choice drink" data-drink="Виски">Виски</button>
+                <button type="button" class="choice drink" data-drink="Самогон">Самогон</button>
+                <button type="button" class="choice drink" data-drink="Пиво">Пиво</button>
+              </div>
+            </div>
+
+          <!-- Комментарий: виден при обоих ответах -->
+          <label class="field-label"><span id="alcoholCommentTitle">Комментарий</span>
+            <textarea id="alcoholComment" placeholder="Например: яблочный сок, лимонад"></textarea>
           </label>
-          <button class="primary alcohol-next" id="alcoholNext" type="button">Продолжить</button>
+
+          <button id="alcoholNext" class="primary">Продолжить</button>
         </div>
-      </div>
     </section>
 
     <section class="screen" data-screen="comment">
