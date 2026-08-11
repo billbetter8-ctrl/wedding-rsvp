@@ -1,10 +1,11 @@
 const CONFIG = {
-  apiUrl: atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3dlZpYnNvTnZiUklibE9feDJlRkxDSTA0MUJxWDRXY0RBZnpHdXBLSk9OZDlHcWhiYnBXdm5Fb3F0bkFZdXNsVVBqQS9leGVj")
+  apiUrl: atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4U3p0MkRLZkVsVU1ucVJ4SlNoaXV4am9peFBCcGcxakJQRmpaMm9HMVZKeHRqYm5yeUFka1ZDcHNTQ2tnTHo3bllldy9leGVj")
 };
 
 const state = {
   guestId: new URLSearchParams(window.location.search).get("guest") || "",
   attendance: "",
+  days: "",
   guests: "",
   guestsOther: "",
   alcohol: "",
@@ -24,24 +25,19 @@ document.addEventListener("DOMContentLoaded", () => {
     window.scrollTo(0, 0);
   }
 
-  function nextScreen(field) {
-    switch (field) {
-      case "attendance": return "afterparty";
-      case "guests": return "alcohol";
-      case "alcohol": return "comment";
-      default: return null;
-    }
-  }
-
+ function nextScreen(field) {
+   switch (field) {
+     case "attendance": return "days";
+     case "days": return "guests";
+     case "guests": return "alcohol";
+     case "alcohol": return "comment";
+     default: return null;
+   }
+ }
   // Переход с первого экрана.
   document.querySelector("[data-screen='welcome'] [data-next]")
     .addEventListener("click", () => show("attendance"));
 
-  // Экран афтерпати: продолжаем к гостям.
-  const afterpartyNext = document.querySelector("[data-screen='afterparty'] [data-next]");
-  if (afterpartyNext) {
-    afterpartyNext.addEventListener("click", () => show("guests"));
-  }
 
   // Все кнопки выбора.
   document.querySelectorAll("[data-field]").forEach(button => {
@@ -77,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // В обоих случаях дальше — по кнопке "Продолжить".
 if (field === "alcohol") {
   document.getElementById("alcoholDetails").classList.add("visible");
-  document.getElementById("drinkList").classList.toggle("visible", value === "yes");
+  document.getElementById("drinkList").classList.toggle("visible", value === "Алкаш");
 
   const title = document.getElementById("alcoholCommentTitle");
   const area = document.getElementById("alcoholComment");

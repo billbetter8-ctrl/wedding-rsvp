@@ -26,47 +26,53 @@
 
     <section class="screen" data-screen="attendance">
       <div class="screen-inner">
-        <div class="progress">01 / 04</div>
+        <div class="progress">01 / 05</div>
         <p class="eyebrow">Будете с нами?</p>
         <h2>Разделите с нами<br>этот особенный день</h2>
         <div class="choices">
-          <button class="choice" data-value="yes" data-field="attendance" data-next>❤️ Да, обязательно!</button>
-          <button class="choice" data-value="no" data-field="attendance" data-next>К сожалению, не смогу</button>
+          <button class="choice" data-value="Да" data-field="attendance" data-next>❤️ Да, обязательно!</button>
+          <button class="choice" data-value="Нет" data-field="attendance" data-next>К сожалению, не смогу</button>
         </div>
       </div>
     </section>
 
-    <section class="screen" data-screen="afterparty">
+    <section class="screen" data-screen="days">
       <div class="screen-inner">
-        <p class="eyebrow">Афтерпати</p>
-        <h2>Праздник продолжится!</h2>
+        <p class="progress">02 / 05</p>
+        <p class="eyebrow">Два дня праздника</p>
+        <h2>Когда вы будете с нами?</h2>
 
-      <div class="info-card">
-        <p>
-          <span class="info-label">Где</span>
-          В доме по адресу: ул. Такая-то, д. 00
-        </p>
-        <p>
-          <span class="info-label">Когда</span>
-          26 октября 2026, сразу после банкета
-        </p>
-      </div>
+        <div class="day-cards">
+          <div class="day-card">
+            <p class="day-title">День 1 · Свадьба</p>
+            <p>24 октября 2026 · 13:50</p>
+            <p>Казань, Центр семьи «Казан» («Чаша»)</p>
+          </div>
+          <div class="day-card">
+            <p class="day-title">День 2 · Афтерпати</p>
+            <p>25 октября 2026</p>
+            <p>Дом по адресу: ул. Такая-то, д. 00</p>
+          </div>
+        </div>
 
-      <p class="hint">А теперь расскажите, сколько вас будет — это поможет нам всё подготовить.</p>
-
-      <button class="primary" data-next>Продолжить</button>
+        <p class="hint">Отметьте, в какие дни вы придёте</p>
+        <div class="choices">
+          <button class="choice" data-field="days" data-value="Роспись" data-next>Буду в первый день</button>
+          <button class="choice" data-field="days" data-value="Дом" data-next>Буду во второй день</button>
+          <button class="choice" data-field="days" data-value="Оба" data-next>Буду в оба дня</button>
+        </div>
       </div>
     </section>
 
     <section class="screen" data-screen="guests">
       <div class="screen-inner">
-        <div class="progress">02 / 04</div>
+        <div class="progress">03 / 05</div>
         <p class="eyebrow">Гости</p>
         <h2>Кто будет<br>на празднике?</h2>
         <div class="choices">
-          <button class="choice" data-value="one" data-field="guests" data-next>Буду один / одна</button>
-          <button class="choice" data-value="two" data-field="guests" data-next>Будем вдвоём</button>
-          <button class="choice" data-value="other" data-field="guests" data-next>Другой вариант</button>
+          <button class="choice" data-value="Один" data-field="guests" data-next>Буду один / одна</button>
+          <button class="choice" data-value="Вдвоем" data-field="guests" data-next>Будем вдвоём</button>
+          <button class="choice" data-value="Другое" data-field="guests" data-next>Другой вариант</button>
         </div>
         <textarea id="guestsOther" class="optional" placeholder="Напишите, как будет"></textarea>
       </div>
@@ -74,12 +80,12 @@
 
     <section class="screen" data-screen="alcohol">
       <div class="screen-inner">
-        <div class="progress">03 / 04</div>
+        <div class="progress">04 / 05</div>
         <p class="eyebrow">Для праздничного стола</p>
         <h2>Будете пить<br>алкоголь?</h2>
         <div class="choices two">
-          <button class="choice" data-value="yes" data-field="alcohol" data-next>🥂 Да</button>
-          <button class="choice" data-value="no" data-field="alcohol" data-next>Не буду</button>
+          <button class="choice" data-value="Алкаш" data-field="alcohol" data-next>🥂 Да</button>
+          <button class="choice" data-value="Трезвиник" data-field="alcohol" data-next>Не буду</button>
         </div>
 
         <div id="alcoholDetails" class="details">
@@ -107,7 +113,7 @@
 
     <section class="screen" data-screen="comment">
       <div class="screen-inner">
-        <div class="progress">04 / 04</div>
+        <div class="progress">05 / 05</div>
         <p class="eyebrow">И напоследок</p>
         <h2>Хотите что-нибудь<br>добавить?</h2>
         <textarea id="comment" class="big-text" placeholder="Пожелания, комментарии или просто тёплые слова ❤️"></textarea>
