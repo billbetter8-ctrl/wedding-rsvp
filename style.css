@@ -197,6 +197,8 @@ h2 {
 
 .details { display: none; margin-top: 30px; }
 .details.visible { display: block; }
+#drinkList { display: none; margin-top: 20px; }
+#drinkList.visible { display: block; }
 
 .hint { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
 

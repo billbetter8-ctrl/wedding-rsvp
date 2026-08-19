@@ -3,7 +3,7 @@ const CONFIG = {
 };
 
 const state = {
-  guestId: new URLSearchParams(window.location.search).get("guest") || "",
+  guestId: "",
   attendance: "",
   days: "",
   guests: "",
@@ -15,6 +15,25 @@ const state = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ===== ЧИТАЕМ UUID ИЗ URL =====
+  const params = new URLSearchParams(window.location.search);
+  state.guestId = (params.get("guest") || "").trim();
+
+  // Если UUID не передан — показываем ошибку
+  if (!state.guestId) {
+    document.body.innerHTML = `
+      <div style="min-height:100svh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:Manrope,sans-serif;background:#f8f5f1;color:#292522;">
+        <div>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:32px;margin:0 0 16px;">Ссылка недействительна</h2>
+          <p style="color:#817970;line-height:1.6;">
+            Пожалуйста, используйте персональную ссылку<br/>из приглашения.
+          </p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
   const screens = [...document.querySelectorAll(".screen")];
 
   function show(name) {
@@ -25,13 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.scrollTo(0, 0);
   }
 
-  // ✅ ИСПРАВЛЕНО: учитываем, был ли выбран только первый день
   function nextScreen(field) {
     switch (field) {
       case "attendance": return "days";
       case "days": return "guests";
       case "guests":
-        // Если только первый день — пропускаем алкоголь
         return state.days === "first" ? "comment" : "alcohol";
       case "alcohol": return "comment";
       default: return null;
@@ -51,13 +68,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const value = button.dataset.value;
       state[field] = value;
 
-      // Выделяем выбранный вариант
       document
         .querySelectorAll(`[data-field="${field}"]`)
         .forEach(item => item.classList.remove("selected"));
       button.classList.add("selected");
 
-      // Если гость не сможет прийти — сразу к комментарию
+      // Если не сможет прийти — сразу к комментарию
       if (field === "attendance" && value === "no") {
         const progress = document.querySelector("[data-screen='comment'] .progress");
         if (progress) progress.textContent = "02 / 02";
@@ -65,35 +81,34 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Показываем поле "другой вариант"
+      // Поле "другой вариант"
       if (field === "guests") {
         const wrap = document.getElementById("guestsOtherWrap");
         if (wrap) wrap.classList.toggle("visible", value === "other");
       }
 
-      // Для алкоголя
+      // Алкоголь
       if (field === "alcohol") {
-        const details = document.getElementById("alcoholDetails");
-        const drinkList = document.getElementById("drinkList");
-        const title = document.getElementById("alcoholCommentTitle");
-        const area = document.getElementById("alcoholComment");
-
-        if (details) details.classList.add("visible");
-        if (drinkList) drinkList.classList.toggle("visible", value === "yes");
-
-        if (value === "yes") {
-          if (title) title.textContent = "Комментарий";
-          if (area) area.placeholder = "Например: белое сухое, без крепкого";
-        } else {
-          if (title) title.textContent = "Что будете пить?";
-          if (area) area.placeholder = "Например: яблочный сок, лимонад";
-          state.drinks = [];
-          document.querySelectorAll("[data-drink]").forEach(chip => chip.classList.remove("selected"));
-        }
-        return;
+          document.getElementById("alcoholDetails").classList.add("visible");
+          document.getElementById("drinkList").classList.toggle("visible", value === "yes");
+  
+          const title = document.getElementById("alcoholCommentTitle");
+          const area = document.getElementById("alcoholComment");
+  
+          if (value === "yes") {
+             title.textContent = "Комментарий";
+             area.placeholder = "Например: белое сухое, без крепкого";
+          } else {
+             title.textContent = "Что будете пить?";
+             area.placeholder = "Например: яблочный сок, лимонад";
+             // Снимаем выбор напитков, если он был
+             state.drinks = [];
+             document.querySelectorAll("[data-drink]").forEach(chip => chip.classList.remove("selected"));
+          }
+          return;
       }
 
-      // Остальные этапы переключаются после выбора
+      // Переход к следующему экрану
       if (button.dataset.next !== undefined) {
         const next = nextScreen(field);
         if (next) setTimeout(() => show(next), 120);
@@ -101,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Выбор напитков (можно несколько)
+  // Выбор напитков
   document.querySelectorAll("[data-drink]").forEach(chip => {
     chip.addEventListener("click", () => {
       const name = chip.dataset.drink;
@@ -141,10 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
       button.textContent = "Отправляем…";
 
       try {
-        if (CONFIG.apiUrl === "PASTE_GOOGLE_APPS_SCRIPT_URL_HERE") {
-          throw new Error("Не настроен URL Google Apps Script.");
-        }
-
         const response = await fetch(CONFIG.apiUrl, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -165,9 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (e) {
         console.error(e);
         if (error) {
-          error.textContent = e.message === "Не настроен URL Google Apps Script."
-            ? "Сервис временно недоступен. Свяжитесь с нами напрямую."
-            : "Не удалось отправить ответ. Проверьте интернет и попробуйте ещё раз.";
+          error.textContent = "Не удалось отправить ответ. Проверьте интернет и попробуйте ещё раз.";
         }
         button.disabled = false;
         button.textContent = "Отправить ответ";
@@ -175,11 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Показываем первый экран при загрузке
+  // Показываем первый экран
   show("welcome");
 });
 
-// ===== Конфетти на экране успеха =====
+// ===== Конфетти =====
 function launchConfetti() {
   const container = document.getElementById("confetti");
   if (!container) return;
